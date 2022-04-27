@@ -38,61 +38,80 @@ describe('#constructor()', () => {
             });
         });
 
-        describe('#addValuesWithDelegateCall()', () => {
-            let Calculator;
+        describe('#addValuesWithCall()', () => {
+            let Calculator,Machine;
             beforeEach(async () => {
                 const CalculatorFactory = await ethers.getContractFactory("Calculator");
                 Calculator = await CalculatorFactory.deploy();
                 await Calculator.deployed();
-            });
-            it.only('should successfully add values with delegate call', async () => {
-                const [owner] = await ethers.getSigners();
 
-                Machine.on("AddedValuesByDelegateCall", (a, b, success) => {
-                    console.log(a, b, success);
-                });
+                const MachineFactory = await ethers.getContractFactory("Machine");
+                Machine = await MachineFactory.deploy(Storage.address);
+                await Machine.deployed();  
 
-                const result = await expect(Machine.addValuesWithDelegateCall(Calculator.address, 1, 2))
-                .to.emit(Machine,'AddedValuesByDelegateCall').withArgs(1,2,true);
-
-                // expect(result.from).to.equal(owner.address);
-                // expect(result.to).to.equal(Machine.address);
-                // Calculator storage DOES NOT CHANGE!
-                expect(await Calculator.calculateResult()).to.equal(0);
-                // Only calculateResult in Machine contract should be changed
-                expect(await Machine.calculateResult()).to.equal(3);
-                expect(await Machine.user()).to.equal(owner.address);
-      
-            });
-          });
-
-          describe('#addValuesWithCall()', () => {
-            let Calculator;
-            beforeEach(async () => {
-                const CalculatorFactory = await ethers.getContractFactory("Calculator");
-                Calculator = await CalculatorFactory.deploy();
-                await Calculator.deployed();
             });
             it('should successfully add values with call', async () => {
+              const [owner] = await ethers.getSigners();
+              await expect(Machine.addValuesWithCall(Calculator.address, 1, 2))
+              .to.emit(Machine,'AddedValuesByCall').withArgs(
+                1,
+                2,
+                true
+              );
               const result = await Machine.addValuesWithCall(Calculator.address, 1, 2);
       
-              expectEvent.inLogs(result.logs, 'AddedValuesByCall', {
-                a: 1,
-                b: 2,
-                success: true,
-              });
-      
-              expect(result.receipt.from).to.equal(owner.toString().toLowerCase());
-              expect(result.receipt.to).should.to.equal(Machine.address.toString().toLowerCase());
+              expect(result.from).to.equal(owner.address);
+              expect(result.to).to.equal(Machine.address);
       
               // Calculator storage SHOULD CHANGE
               expect(await Calculator.calculateResult()).to.equal(3);
       
               expect(await Machine.calculateResult()).to.equal(0);
       
-              expect(await Machine.user()).should.be.equal(constants.ZERO_ADDRESS);
-              (await Calculator.user()).should.be.equal(Machine.address);
+              expect(await Machine.user()).to.equal(owner.address);
+              expect(await Calculator.user()).to.equal(Machine.address);
             });
+        });
+
+        describe('#addValuesWithDelegateCall()', () => {
+          let Calculator;
+          beforeEach(async () => {
+              const CalculatorFactory = await ethers.getContractFactory("Calculator");
+              Calculator = await CalculatorFactory.deploy();
+              await Calculator.deployed();
           });
+          it('should successfully add values with delegate call', async () => {
+              const [owner] = await ethers.getSigners();
+
+              // Machine.on("AddedValuesByDelegateCall", (a, b, success) => {
+              //     console.log(a, b, success);
+              // });
+
+              await expect(Machine.addValuesWithDelegateCall(Calculator.address, 1, 2))
+              .to.emit(Machine,'AddedValuesByDelegateCall').withArgs(
+                1,
+                2,
+                true
+              );
+              
+              // const receipt = await ethers.provider.getTransactionReceipt(result.hash);
+              // const interface = new ethers.utils.Interface(["event AddedValuesByDelegateCall(uint256 a, uint256 b, bool success)"]);
+              // const data = receipt.logs[0].data;
+              // const topics = receipt.logs[0].topics;
+              // const event = interface.decodeEventLog("AddedValuesByDelegateCall", data, topics);
+              // expect(event.a).to.equal(1);
+              // expect(event.b).to.equal(2);
+              // expect(event.success).to.equal(true);
+              const result = await Machine.addValuesWithDelegateCall(Calculator.address, 1, 2);
+              expect(result.from).to.equal(owner.address);
+              expect(result.to).to.equal(Machine.address);
+              // Calculator storage DOES NOT CHANGE!
+              expect(await Calculator.calculateResult()).to.equal(0);
+              // Only calculateResult in Machine contract should be changed
+              expect(await Machine.calculateResult()).to.equal(3);
+              expect(await Machine.user()).to.equal(owner.address);
+              expect(await Calculator.user()).to.equal(ethers.constants.AddressZero);
+          });
+        });
 
   });
