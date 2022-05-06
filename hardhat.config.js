@@ -1,4 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-ethers");
+require('@openzeppelin/hardhat-upgrades');
 require("dotenv").config({ path: "./hardhat-tutorial.env" });
 
 const RINKEBY_API_KEY_URL = process.env.RINKEBY_API_KEY_URL;
@@ -28,6 +30,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: {
     compilers: [
+      {
+        version: "0.8.4"
+      },
       {
         version: "0.8.0"
       },
