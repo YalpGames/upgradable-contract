@@ -11,6 +11,8 @@
     "hardhat": "^2.9.3"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "@openzeppelin/contracts-upgradeable": "^4.6.0",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^16.0.0",
     "openzeppelin-test-helpers": "^0.5.1"
