@@ -37,6 +37,7 @@ library IterableMapping {
         }
     }
 
+    //删除任意一个索引得数据 并且将最后一个数据填充删除得数据索引，实现map得删除
     function remove(Map storage map, address key) public {
         if (!map.inserted[key]) {
             return;
@@ -49,9 +50,10 @@ library IterableMapping {
         uint lastIndex = map.keys.length - 1;
         address lastKey = map.keys[lastIndex];
 
+        //将lastkey填充到这个索引
         map.indexOf[lastKey] = index;
         delete map.indexOf[key];
-
+        //将lastkey前移，并且删除最后得keys
         map.keys[index] = lastKey;
         map.keys.pop();
     }
