@@ -3,31 +3,29 @@ pragma solidity ^0.8.0;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-import {IMichaelJordanToken} from "../interface/IMichaelJordanToken.sol";
-
+import "../utils/GameOwner.sol"
 /**
  * @title MichaelJordanToken (MJT)
  * @notice
 */
-contract MichaelJordanToken is ERC20, Ownable, IMichaelJordanToken {
+contract BasketballTeamToken is ERC20, GameOwner {
     uint256 private immutable _SUPPLY_CAP;
+    address private team;
 
     /**
      * @notice Constructor
-     * @param _premintReceiver address that receives the premint
-     * @param _premintAmount amount to premint
      * @param _cap supply cap (to prevent abusive mint)
      */
     constructor(
-        address _premintReceiver,
-        uint256 _premintAmount,
         uint256 _cap
-    ) ERC20("MichaelJordan Token", "MJT") {
-        require(_cap > _premintAmount, "MJT: Premint amount is greater than cap");
-        // Transfer the sum of the premint to address
-        _mint(_premintReceiver, _premintAmount);
+    ) ERC20("BasketballTeam Token", "BTT") {
         _SUPPLY_CAP = _cap;
+    }
+
+    function passTeamRole(address _team) public onlyOwner returns (bool) {
+        team = _team;
+
+        return true;
     }
 
     /**
@@ -36,12 +34,26 @@ contract MichaelJordanToken is ERC20, Ownable, IMichaelJordanToken {
      * @param amount amount to mint
      * @return status true if mint is successful, false if not
      */
-    function mint(address account, uint256 amount) external override onlyOwner returns (bool status) {
+    function GameMint(address account, uint256 amount) external override onlyOwner returns (bool status) {
         if (totalSupply() + amount <= _SUPPLY_CAP) {
             _mint(account, amount);
             return true;
         }
         return false;
+    }
+
+    function gameBurn(address account, uint256 amount) public onlyGame returns (bool){
+        _burn(account, amount);
+        return true;
+    }
+    function gameTransfer(address from, address to, uint256 amount) public onlyGame returns (bool){
+        _transfer(from, to, amount);
+        return true;
+    }
+
+    function gameApprove(address spender, uint256 amount) public onlyGame returns (bool) {
+        _approve(_msgSender(), spender, amount);
+        return true;
     }
 
     /**
