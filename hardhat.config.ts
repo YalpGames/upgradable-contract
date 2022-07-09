@@ -1,13 +1,18 @@
-require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-ethers");
-require('@openzeppelin/hardhat-upgrades');
+import "@nomiclabs/hardhat-waffle";
+import { task } from "hardhat/config";
+import "@nomiclabs/hardhat-ethers";
+import '@openzeppelin/hardhat-upgrades';
 require("dotenv").config({ path: "./hardhat-tutorial.env" });
+import 'hardhat-deploy';
 
 const RINKEBY_API_KEY_URL = process.env.RINKEBY_API_KEY_URL;
 const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
 
 const ROPSTEN_API_KEY_URL = process.env.ROPSTEN_API_KEY_URL;
 const ROPSTEN_PRIVATE_KEY = process.env.ROPSTEN_PRIVATE_KEY;
+
+const POLYGON_API_KEY_URL = process.env.POLYGON_API_KEY_URL;
+const POLYGON_PRIVATE_KEY = process.env.POLYGON_PRIVATE_KEY;
 
 const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
 
@@ -42,6 +47,11 @@ module.exports = {
       },
     ]
   },
+  namedAccounts: {
+    deployer: 0,
+    tokenOwner: 1,
+    play1:2,
+  },
   networks: {
     localhost: {
       url: "http://localhost:8545",
@@ -59,6 +69,13 @@ module.exports = {
       url: ROPSTEN_API_KEY_URL,
       accounts: [ROPSTEN_PRIVATE_KEY],
     },
+    polygon:{
+      url: POLYGON_API_KEY_URL,
+      accounts: [POLYGON_PRIVATE_KEY],
+    },
+  },
+  paths: {
+    sources: 'contracts/upgradeable-contract',
   },
   etherscan: {
     // Your API key for Etherscan

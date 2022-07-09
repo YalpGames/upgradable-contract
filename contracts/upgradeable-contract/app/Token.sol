@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "../utils/GameOwner.sol"
+import "../utils/GameOwner.sol";
 /**
  * @title MichaelJordanToken (MJT)
  * @notice
@@ -20,6 +20,7 @@ contract BasketballTeamToken is ERC20, GameOwner {
         uint256 _cap
     ) ERC20("BasketballTeam Token", "BTT") {
         _SUPPLY_CAP = _cap;
+        gameRoles[msg.sender] = true;
     }
 
     function passTeamRole(address _team) public onlyOwner returns (bool) {
@@ -34,7 +35,7 @@ contract BasketballTeamToken is ERC20, GameOwner {
      * @param amount amount to mint
      * @return status true if mint is successful, false if not
      */
-    function GameMint(address account, uint256 amount) external override onlyOwner returns (bool status) {
+    function GameMint(address account, uint256 amount) external onlyOwner returns (bool status) {
         if (totalSupply() + amount <= _SUPPLY_CAP) {
             _mint(account, amount);
             return true;
@@ -59,7 +60,7 @@ contract BasketballTeamToken is ERC20, GameOwner {
     /**
      * @notice View supply cap
      */
-    function SUPPLY_CAP() external view override returns (uint256) {
+    function SUPPLY_CAP() external view returns (uint256) {
         return _SUPPLY_CAP;
     }
 }

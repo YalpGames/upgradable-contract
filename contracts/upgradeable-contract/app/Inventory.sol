@@ -11,7 +11,7 @@ contract BasketballTeamInventory is ERC1155Supply, GameOwner, Pausable {
     }
 
     function setUrl(string memory newUrl) public onlyOwner returns (bool){
-        _setURL(newUrl);
+        _setURI(newUrl);
         return true;
     }
 

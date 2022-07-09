@@ -72,7 +72,7 @@ contract MichaelJordanNFT is Ownable, ERC721A, ReentrancyGuard {
     _safeMint(msg.sender, 1);
     refundIfOver(price);
   }
-//公开mint
+//公开mintx
   function publicSaleMint(uint256 quantity, uint256 callerPublicSaleKey)
     external
     payable
