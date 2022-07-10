@@ -57,9 +57,14 @@ describe('proxy contract', function () {
     let iface = new ethers.utils.Interface(ABI);
     let data = iface.encodeFunctionData("SetUint256Param", [ "1", 2 ]);
     let dataGet = iface.encodeFunctionData("GetUint256Param", [ "1" ]);
-
+    console.log();
+    console.log("(1)== 获取升级前合约数据");
     let tx = await alice.sendTransaction({to: transparentUpgradeableProxyContract.address, data: data});
     const getTransactionReceipt= await tx.wait();
+    const paramsWithProxy = await params.attach(transparentUpgradeableProxyContract.address)
+    let resultParam = await paramsWithProxy.GetUint256Param("1");
+    console.log("resultParam:", resultParam);
+    expect(resultParam).to.equal(2);
 
     let eventabi = [ "event Uint256ParamSetted(string indexed _key,uint256 _value);" ];
     let iface1 = new ethers.utils.Interface(eventabi);
@@ -71,6 +76,8 @@ describe('proxy contract', function () {
     const value = await params.GetUint256Param("1");
     console.log(value)
 
+    console.log();
+    console.log("(2)==>升级合约");
     // upgrade before 
     let resultBefore = await alice.call({to: transparentUpgradeableProxyContract.address, data: dataGet});
     expect(resultBefore).to.equal('0x0000000000000000000000000000000000000000000000000000000000000002');
@@ -81,7 +88,9 @@ describe('proxy contract', function () {
 
     let result = await alice.call({to: transparentUpgradeableProxyContract.address, data: dataGet});
     expect(result).to.equal('0x0000000000000000000000000000000000000000000000000000000000000003');
-    // more elegant way
+    console.log();
+    console.log("(3)==>获取升级后合约数据");
+    //more elegant way
     const paramsNewWithProxy = await paramsNew.attach(transparentUpgradeableProxyContract.address)
     let result1 = await paramsNewWithProxy.GetUint256Param("1");
     console.log("result1:", result1);
@@ -91,10 +100,12 @@ describe('proxy contract', function () {
     const getTransactionReceipt1 = await tx1.wait();
 
     let log1 = iface1.parseLog(getTransactionReceipt1.logs[0]);
-
+    console.log();
+    console.log("(4)==>获取未注册升级代理的原始合约数据");
     //not change 
     const value1 = await paramsNew.GetUint256Param("1");
     console.log(value1)
+    expect(value1).to.equal(1);
 
     // change admin
     let txxx = await proxyAdminContract.transferOwnership(alice.address);
