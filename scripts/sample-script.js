@@ -20,6 +20,13 @@ async function main() {
   await greeter.deployed();
 
   console.log("Greeter deployed to:", greeter.address);
+  
+  const {deployments, getNamedAccounts} = hre;
+  const deployer = await getNamedAccounts();
+  console.log("001 deployer address ==>",deployer);
+  const play1 = await getUnnamedAccounts();
+  console.log(play1);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
