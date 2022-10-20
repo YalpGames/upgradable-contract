@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.14;
 
 import '@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol';
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
@@ -55,7 +55,7 @@ contract MineUpgradeable is
         emit SetGaugeController(oldGaugeController, newGaugeController);
     }
 
-    function getPoolLength() external  onlyOwner returns(uint256){
+    function getPoolLength() external view onlyOwner returns(uint256){
         poolInfos.length;
     }
 
@@ -98,7 +98,7 @@ contract MineUpgradeable is
     function initialize(
         address _mainToken,
         address _mainCoinFactory,
-        IGaugeController _gaugeController,
+        address _gaugeController,
         uint256 _delayK,
         uint256 _delayB,
         uint256 _rate

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-pragma solidity 0.8.15;
+pragma solidity 0.8.14;
 
 import '@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol';
 import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol';
@@ -200,8 +200,8 @@ contract CoinFactoryUpgradeable is
 
     function initialize(
         address _mainCoin,
-        IUniswapV2Factory _uniswapFactory,
-        IUniswapV2Router02 _uniswapRouter,
+        address _uniswapFactory,
+        address _uniswapRouter,
         uint256 _effectiveTime,
         bytes32 _initHash
     ) public initializer {
@@ -210,11 +210,11 @@ contract CoinFactoryUpgradeable is
         require(address(_uniswapRouter) != address(0), 'GameCoin: uniswapR cannot be 0');
 
         mainCoin = _mainCoin;
-        uniswapFactory = _uniswapFactory;
-        uniswapRouter = _uniswapRouter;
+        uniswapFactory = IUniswapV2Factory(_uniswapFactory);
+        uniswapRouter = IUniswapV2Router02(_uniswapRouter);
         initHash = _initHash;
         addLiquidityEffectiveTime = _effectiveTime;
-        IERC20Upgradeable(mainCoin).safeApprove(address(uniswapRouter), type(uint256).max);
+        //IERC20Upgradeable(mainCoin).safeApprove(address(uniswapRouter), type(uint256).max);
 
         __ReentrancyGuard_init();
         __Pausable_init();
