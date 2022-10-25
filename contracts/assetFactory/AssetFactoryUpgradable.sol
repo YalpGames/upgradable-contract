@@ -56,7 +56,6 @@ contract AssetFactoryUpgradable is
         registry[address(collection)] = gameId;
         emit CollectionCreated(address(collection), msg.sender);
         return collection;
-
     }
 
     function createAssetAndMint(
