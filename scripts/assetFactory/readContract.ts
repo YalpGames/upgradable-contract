@@ -12,11 +12,10 @@ async function main() {
   const AssetFactory = await ethers.getContractAt('AssetFactoryUpgradable', assetFactoryUpgradableAddress);
   console.log('AssetFactory: ', AssetFactory.address);
 
-  contractName = `CoinFactoryStorage`;
+  contractName = `CoinFactoryUpgradeable`;
   dir =  `deployments/dev/${deployNetwork}/${contractName}.json`;
   const coinFactoryStorageAddress = JSON.parse(fs.readFileSync(dir)).address;
-
-  const coinFactory = await ethers.getContractAt('CoinFactoryStorage', coinFactoryStorageAddress);
+  const coinFactory = await ethers.getContractAt('CoinFactoryUpgradeable', coinFactoryStorageAddress);
 
   console.log(await coinFactory.allGames('1001'));
   console.log(developer.address);

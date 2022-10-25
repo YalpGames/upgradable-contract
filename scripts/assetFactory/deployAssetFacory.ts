@@ -25,8 +25,7 @@ async function main() {
   console.log('p12AssetFactory proxy: ', assetFactory.address);
 
   //储存部署信息在文件
-  let artifact = await artifacts.readArtifact('AssetFactoryUpgradable');
-  await writeAbiAddr(artifact, assetFactory.address, 'AssetFactoryUpgradable', network.name);
+  await writeAbiAddr(artifacts, assetFactory.address, 'AssetFactoryUpgradable', network.name);
         
 }
 

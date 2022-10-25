@@ -9,7 +9,7 @@ async function main() {
     let dir =  `deployments/dev/${deployNetwork}/${contractName}.json`;
     const proxyAddr = JSON.parse(fs.readFileSync(dir)).address;
 
-    const P12CoinFactoryUpgradeableF = await ethers.getContractFactory('P12CoinFactoryUpgradeable2');
+    const P12CoinFactoryUpgradeableF = await ethers.getContractFactory('CoinFactoryUpgradeable');
    // const proxyAddr = '0x3288095c0033E33DcD25bf2cf439B848b45DFB70';
 
     // const p12Token = '0xeAc1F044C4b9B7069eF9F3eC05AC60Df76Fe6Cd0';
@@ -18,7 +18,9 @@ async function main() {
     await upgrades.upgradeProxy(proxyAddr, P12CoinFactoryUpgradeableF);
 
     console.log('proxy contract', proxyAddr);
-
+    //储存部署信息在文件
+    await writeAbiAddr(artifacts, proxyAddr, 'CoinFactoryUpgradeable', network.name);
+    
 }
 
 main().catch((error) => {

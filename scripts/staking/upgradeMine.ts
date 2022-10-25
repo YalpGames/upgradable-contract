@@ -23,6 +23,8 @@ async function main() {
 
     console.log('proxy contract', proxyAddr);
 
+    //储存部署信息在文件
+    await writeAbiAddr(artifacts, proxyAddr, 'MineUpgradeable', network.name);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

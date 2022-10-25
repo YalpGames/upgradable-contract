@@ -25,10 +25,9 @@ async function main() {
     );
     console.log('proxy contract', coinFactoryUpgradeable.address);
 
-      //储存部署信息在文件
-  let artifact = await artifacts.readArtifact('CoinFactoryUpgradeable');
-  await writeAbiAddr(artifact, coinFactoryUpgradeable.address, 'CoinFactoryUpgradeable', network.name);
-  
+    //储存部署信息在文件
+    await writeAbiAddr(artifacts, coinFactoryUpgradeable.address, 'CoinFactoryUpgradeable', network.name);
+    
 }
 
 main().catch((error) => {

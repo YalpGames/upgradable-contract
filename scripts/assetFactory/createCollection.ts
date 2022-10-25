@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import env, { ethers, upgrades,network,artifacts } from 'hardhat';
-import { writeAbiAddr } from '../artifact_saver.js';
+import { writeAbiAddr, writeAbiAddrForAbi } from '../artifact_saver.js';
 const fs = require('fs');
 
 async function main() {
@@ -18,14 +18,22 @@ async function main() {
   const assetFactory = await ethers.getContractAt('AssetFactoryUpgradable', assetFactoryUpgradableAddress);
 
   /* cSpell:disable */
-  const collectionAddress = await assetFactory.connect(developer).createCollection('1001', 'ipfs://QmU9qevD5dbj4Mpret5ZqYL2FWh8yov2tZmAFgRNBkBjCA');
+  const collectionInfo = await assetFactory.connect(developer).createCollection('1001', 'ipfs://QmU9qevD5dbj4Mpret5ZqYL2FWh8yov2tZmAFgRNBkBjCA');
+
+  let collectionAddress;
+  (await collectionInfo.wait()).events.forEach((x:any) => {
+    if (x.event === 'CollectionCreated') {
+      collectionAddress = x.args.collection;
+    }
+  });
+  console.log('collectionAddress is :', collectionAddress);
 
   let artifact2 = {
     contractName:'collection',
     abi:''
   };
 
-  await writeAbiAddr(artifact2, collectionAddress, 'collection', network.name);
+  await writeAbiAddrForAbi(artifact2, collectionAddress, network.name);
 
 }
 

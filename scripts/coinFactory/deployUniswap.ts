@@ -1,5 +1,5 @@
 import { ethers , network, artifacts} from 'hardhat';
-import { writeAbiAddr } from '../artifact_saver.js';
+import { writeAbiAddr ,writeAbiAddrForAbi } from '../artifact_saver.js';
 import * as compiledUniswapFactory from '@uniswap/v2-core/build/UniswapV2Factory.json';
 import * as compiledUniswapRouter from '@uniswap/v2-periphery/build/UniswapV2Router02.json';
 const fs = require('fs');
@@ -35,13 +35,13 @@ async function main() {
         contractName:'uniswapV2Factory',
         abi:compiledUniswapFactory.interface
     };
-    await writeAbiAddr(artifact, uniswapV2Factory.address, 'uniswapV2Factory', network.name);
+    await writeAbiAddrForAbi(artifact, uniswapV2Factory.address, network.name);
       
     let artifact2 = {
         contractName:'uniswapV2Router02',
         abi:compiledUniswapRouter.abi
     };
-    await writeAbiAddr(artifact2, uniswapV2Router02.address, 'uniswapV2Router02', network.name);
+    await writeAbiAddrForAbi(artifact2, uniswapV2Router02.address, network.name);
     
 }
 

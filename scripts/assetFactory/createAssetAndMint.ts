@@ -21,14 +21,26 @@ async function main() {
 
   //const collectionAddr = '0xF60C0C3fA68387f05D2A5F7e6BA468fAaDB0dd62';
 
-  const assetFactory = await ethers.getContractAt('P12AssetFactoryUpgradable', assetFactoryUpgradableAddress);
+  const assetFactory = await ethers.getContractAt('AssetFactoryUpgradable', assetFactoryUpgradableAddress);
 
-  await assetFactory.connect(developer).createAssetAndMint(
+  const tx = await assetFactory.connect(developer).createAssetAndMint(
     collectionAddr,
-    100,
+    110,
     /* cSpell:disable */
     'ipfs://QmVZMakUubEr5Gaa5DAcunMjCWj5pkUMXav21bS7DTjySQ',
   );
+
+  let tokenId;
+  (await tx.wait()).events.forEach((x:any) => {
+    if (x.event === 'SftCreated') {
+      tokenId = x.args.tokenId;
+    }
+  });
+
+  console.log("tokenId: ",tokenId);
+  const asset = await ethers.getContractAt('Asset', collectionAddr);
+  console.log("asset amount: ",await asset.supply(tokenId));
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

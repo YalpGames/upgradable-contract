@@ -17,9 +17,9 @@ async function main() {
     dir =  `deployments/dev/${deployNetwork}/${contractName}.json`;
     const gaugeController = JSON.parse(fs.readFileSync(dir)).address;
    
-    contractName = `VotingEscrow`;
-    dir =  `deployments/dev/${deployNetwork}/${contractName}.json`;
-    const votingEscrow = JSON.parse(fs.readFileSync(dir)).address;
+    // contractName = `VotingEscrow`;
+    // dir =  `deployments/dev/${deployNetwork}/${contractName}.json`;
+    // const votingEscrow = JSON.parse(fs.readFileSync(dir)).address;
   
     const delayK = 60;
     const delayB = 60;
@@ -28,7 +28,7 @@ async function main() {
     const MineUpgradeable = await ethers.getContractFactory('MineUpgradeable');
     const mineUpgradeable = await upgrades.deployProxy(
       MineUpgradeable,
-      [mainToken, coinFactory, gaugeController, votingEscrow, delayK, delayB, rate],
+      [mainToken, coinFactory, gaugeController, delayK, delayB, rate],
       {
         kind: 'uups',
       },

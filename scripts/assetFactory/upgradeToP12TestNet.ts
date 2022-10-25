@@ -14,7 +14,7 @@ async function main() {
   const assetFactoryUpgradableAddress = JSON.parse(fs.readFileSync(dir)).address;
 
 
-  const assetFactoryUpgradableFatory = await ethers.getContractFactory('P12AssetFactoryUpgradable');
+  const assetFactoryUpgradableFatory = await ethers.getContractFactory('AssetFactoryUpgradable');
 
   //const proxyAddr = '0x173e4D790A43E3016AAeD9Bbd0987CD760f0dB9F';
 
