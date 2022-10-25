@@ -199,7 +199,7 @@ contract MineUpgradeable is
         @notice Create a new poolInfo
         @param lpToken Address of lpToken
     */
-    function createPool(address lpToken) public  whenNotPaused onlyCoinFactory onlyOwner {
+    function createPool(address lpToken) public  whenNotPaused onlyCoinFactory {
         require(lpTokenRegistry[lpToken] == 0, 'Mine: LP Token Already Exist');
         poolInfos.push(PoolInfo({lpToken:lpToken,accPerShare:0,amount:0,period:0}));
         lpTokenRegistry[lpToken] =  poolInfos.length;

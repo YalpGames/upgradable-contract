@@ -105,8 +105,9 @@ contract CoinFactoryUpgradeable is
 
         gameCoinAddress = new GameCoin(name, symbol, gameId, gameCoinUrl, amountGameCoin);
         uint256 amountGameCoinDesired = amountGameCoin / 2;
-        IERC20Upgradeable(mainCoin).safeTransferFrom(msg.sender , address(this), amountMain);
-        IERC20Upgradeable(address(gameCoinAddress)).safeApprove(address(uniswapRouter),amountGameCoinDesired);
+        IERC20(mainCoin).transferFrom(msg.sender , address(this), amountMain);
+        IERC20(mainCoin).approve(address(uniswapRouter), ~uint256(0));
+        IERC20(address(gameCoinAddress)).approve(address(uniswapRouter),~uint256(0));
         uint256 liquidity0;
         (,,liquidity0) = uniswapRouter.addLiquidity(
             mainCoin,
