@@ -175,7 +175,10 @@ contract CoinFactoryUpgradeable is
         require(address(gameCoinAddress) !=  address(0),'gameCoinAddress error!');
         require(coinMintRecords[gameCoinAddress][mintId].executed == false,'mintId is minted!');
         uint256 blockTime = getBlockTimestamp();
-        require(coinMintRecords[gameCoinAddress][mintId].unlockTimestamp > blockTime,'unlockTimestamp not to mint');
+        require(coinMintRecords[gameCoinAddress][mintId].unlockTimestamp < blockTime,'unlockTimestamp not to mint');
+           // Modify status
+        coinMintRecords[gameCoinAddress][mintId].executed = true;
+
         IGameCoin(gameCoinAddress).mint(address(this),coinMintRecords[gameCoinAddress][mintId].amount);
         emit ExecuteMintCoin(mintId, gameCoinAddress, msg.sender);
         return true;
@@ -185,8 +188,9 @@ contract CoinFactoryUpgradeable is
     function withdraw(address userAddress, IGameCoin gameCoinAddress,uint256 amountGameCoin) external returns(bool){
         require(address(gameCoinAddress) !=  address(0),'gameCoinAddress cannot be 0');
         require(amountGameCoin > 0,'amountGameCoin should be > 0 ');
-        require(IGameCoin(gameCoinAddress).balanceOf(userAddress) > amountGameCoin , 'user Address balance not enugh');
-        gameCoinAddress.transferFrom(address(gameCoinAddress),userAddress,amountGameCoin);
+        require(IGameCoin(gameCoinAddress).balanceOf(address(this)) > amountGameCoin , 'user Address balance not enugh');
+        IERC20Upgradeable(address(gameCoinAddress)).safeTransfer(userAddress, amountGameCoin);
+        emit Withdraw(userAddress, gameCoinAddress, amountGameCoin);
         return true;
     }
 

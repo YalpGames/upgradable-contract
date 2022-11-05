@@ -8,6 +8,7 @@ import '@openzeppelin/contracts/security/Pausable.sol';
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 import './interfaces/IVotingEscrow.sol';
+import 'hardhat/console.sol';
 
 contract VotingEscrow is ReentrancyGuard, Ownable, Pausable, IVotingEscrow {
   using SafeERC20 for IERC20;
@@ -151,6 +152,8 @@ contract VotingEscrow is ReentrancyGuard, Ownable, Pausable, IVotingEscrow {
     require(value > 0, 'VotingEscrow: invalid value');
     require(_locked.amount == 0, 'VotingEscrow: old tokens locked');
     require(_unlockTime > block.timestamp, 'VotingEscrow: lock later');
+    console.logUint(_unlockTime);
+    console.logUint(block.timestamp);
     require(_unlockTime <= block.timestamp + MAXTIME, 'VotingEscrow: exceed cap period');
     _depositFor(msg.sender, value, _unlockTime, _locked, OperationType.CREATE_LOCK_TYPE);
   }
