@@ -122,8 +122,8 @@ export async function setUp(ec: EconomyContract) {
 export async function deployAll(): Promise<EconomyContract & ExternalContract> {
   const ex = await deployExternal();
   const ec = await deployEconomyContract(ex);
-  console.log(ex);
-  console.log(ec);
+  //console.log(ex);
+  //console.log(ec);
   await setUp(ec);
   return { ...ex, ...ec };
 }

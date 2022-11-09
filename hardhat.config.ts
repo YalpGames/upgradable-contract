@@ -107,6 +107,10 @@ module.exports = {
       // gas: 210000000,
       // blockGasLimit:950000000
     },
+    privateChain:{
+      url: "http://47.99.55.27:8500",
+      chainId: 84537
+    },
     polygon:{
       url: POLYGON_API_KEY_URL,
       accounts: [POLYGON_PRIVATE_KEY],

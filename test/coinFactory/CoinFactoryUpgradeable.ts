@@ -142,6 +142,8 @@ describe('CoinFactory', function () {
       'Ownable: new owner is the zero address',
     );
 
+    await core.CoinFactory.connect(admin).transferOwnership(admin2.address);
+
     // await expect(core.CoinFactory.connect(admin2).claimOwnership()).to.be.revertedWith('SafeOwnable: caller != pending');
     await expect(
     core.CoinFactory.connect(admin2).upgradeTo(Buffer.from(ethers.utils.randomBytes(20)).toString('hex')),

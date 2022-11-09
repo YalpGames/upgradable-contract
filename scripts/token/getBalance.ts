@@ -1,4 +1,5 @@
   //connnet mainToken Instance
+import { log } from 'console';
 import env, { ethers, upgrades,network,artifacts } from 'hardhat';
 import { writeAbiAddr } from '../artifact_saver.js';
 const fs = require('fs');
@@ -26,6 +27,12 @@ async function main() {
     const adminMainTokenBalance = await mainToken.balanceOf(admin.address);
     console.log(`user balance: ${ethers.utils.formatEther(userMainTokenBalance)}\n`);
     console.log(`admin balance: ${ethers.utils.formatEther(adminMainTokenBalance)}\n`);
+
+    const blockNumber = await ethers.provider.getBlockNumber();
+    const block = await ethers.provider.getBlock(blockNumber);
+    console.log("blockNumber is: ",blockNumber);
+    console.log(block);
+    
 }
 
 main().catch((error) => {
