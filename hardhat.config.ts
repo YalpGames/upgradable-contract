@@ -9,8 +9,8 @@ require("dotenv").config({ path: "./hardhat-tutorial.env" });
 
 const ETH_MAINNER_API_KEY_URL = process.env.ETH_MAINNER_API_KEY_URL;
 
-const POLYGON_API_KEY_URL = process.env.POLYGON_API_KEY_URL;
-const POLYGON_PRIVATE_KEY = process.env.POLYGON_PRIVATE_KEY;
+const MUMBAI_API_KEY_URL = process.env.MUMBAI_API_KEY_URL;
+const MUMBAI_PRIVATE_KEY = process.env.MUMBAI_PRIVATE_KEY;
 
 const GOERLI_API_KEY_URL = process.env.GOERLI_API_KEY_URL;
 const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
@@ -109,11 +109,12 @@ module.exports = {
     },
     privateChain:{
       url: "http://47.99.55.27:8500",
-      chainId: 84537
+      chainId: 84537,
+      accounts: [GOERLI_PRIVATE_KEY],
     },
-    polygon:{
-      url: POLYGON_API_KEY_URL,
-      accounts: [POLYGON_PRIVATE_KEY],
+    mumbai:{
+      url: MUMBAI_API_KEY_URL,
+      accounts: [MUMBAI_PRIVATE_KEY],
     },
     goerli:{
       url: GOERLI_API_KEY_URL,
